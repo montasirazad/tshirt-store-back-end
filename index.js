@@ -35,13 +35,24 @@ async function run() {
 
         // DElETE 
 
-        app.delete('/all-products/:id', async (req,res)=>{
+        app.delete('/all-products/:id', async (req, res) => {
             const id = req.params.id;
-            const query = { _id:ObjectId(id)};
+            const query = { _id: ObjectId(id) };
             const result = await tShirtDB.deleteOne(query);
             console.log(result);
             res.send(result);
 
+        })
+
+        // Find an Item
+
+        app.get('/all-products/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await tShirtDB.findOne(query);
+            console.log(result);
+            res.send(result);
+            console.log('Getting data of', id);
         })
 
     } finally {
