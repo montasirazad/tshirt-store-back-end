@@ -50,16 +50,41 @@ async function run() {
             const id = req.params.id;
             const query = { _id: ObjectId(id) };
             const result = await tShirtDB.findOne(query);
-            console.log(result);
             res.send(result);
-            console.log('Getting data of', id);
-        })
+            // console.log('Getting data of', id);
+            // console.log(result);
+        });
+
+
 
     } finally {
         //await client.close();
     }
 }
 run().catch(console.dir);
+
+// CLIENT ORDER 
+
+async function clientOrder() {
+    try {
+        await client.connect();
+        const database = client.db("all-order");
+        const orderDB = database.collection("order");
+
+        app.post('/add-order', async (req, res) => {
+            const frontEndOrder = req.body;
+            const result = await orderDB.insertOne(frontEndOrder);
+            res.send(result);
+            console.log(result);
+
+        })
+
+    } finally {
+        //await client.close();
+    }
+}
+clientOrder().catch(console.dir);
+
 
 app.get('/', (req, res) => {
     res.send('setup done')
