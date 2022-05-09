@@ -11,13 +11,12 @@ const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const uri = `mongodb+srv://${process.env.DB_NAME}:${process.env.DB_PASS}@cluster0.k8hkv.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
+// ADMIN API
 async function run() {
     try {
         await client.connect();
         const database = client.db("all-tShirt");
         const tShirtDB = database.collection("tShirt");
-
-
         // POST
         app.post('/add-products', async (req, res) => {
             const frontEndData = req.body
@@ -29,7 +28,7 @@ async function run() {
         // GET 
         app.get('/all-products', async (req, res) => {
             const allProducts = tShirtDB.find({});
-            const result = await allProducts.toArray(allProducts);
+            const result = await allProducts.toArray();
             res.send(result)
         });
 
@@ -70,13 +69,28 @@ async function clientOrder() {
         await client.connect();
         const database = client.db("all-order");
         const orderDB = database.collection("order");
-
+        // Orders Api
         app.post('/add-order', async (req, res) => {
             const frontEndOrder = req.body;
             const result = await orderDB.insertOne(frontEndOrder);
             res.send(result);
             console.log(result);
 
+        });
+        // All order Api
+        app.get('/add-order', async (req, res) => {
+            const allOrders = orderDB.find({});
+            const result = await allOrders.toArray();
+            res.send(result)
+        })
+
+        // get order data api
+        app.get('/confirmed-order', async (req, res) => {
+            console.log(req.query);
+            const allOrders = orderDB.find({ email: req.query.email });
+            const result = await allOrders.toArray();
+            res.send(result);
+            //console.log(result);
         })
 
     } finally {
