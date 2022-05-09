@@ -21,7 +21,7 @@ async function run() {
         app.post('/add-products', async (req, res) => {
             const frontEndData = req.body
             const result = await tShirtDB.insertOne(frontEndData)
-            console.log(result);
+            // console.log(result);
             res.send(result)
         });
 
@@ -38,7 +38,7 @@ async function run() {
             const id = req.params.id;
             const query = { _id: ObjectId(id) };
             const result = await tShirtDB.deleteOne(query);
-            console.log(result);
+            // console.log(result);
             res.send(result);
 
         })
@@ -102,7 +102,6 @@ async function clientOrder() {
 
         // get order data api
         app.get('/confirmed-order', async (req, res) => {
-            console.log(req.query);
             const allOrders = orderDB.find({ email: req.query.email });
             const result = await allOrders.toArray();
             res.send(result);
