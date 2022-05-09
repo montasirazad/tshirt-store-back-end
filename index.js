@@ -53,8 +53,24 @@ async function run() {
             // console.log('Getting data of', id);
             // console.log(result);
         });
+        // Update  an item
+        app.put('/all-products/:id', async (req, res) => {
+            const id = req.params.id;
+            const updatedItem = req.body;
+            const filter = { _id: ObjectId(id) };
+            const options = { upsert: true };
+            const updateDoc = {
+                $set: {
+                    name: updatedItem.name,
+                    price: updatedItem.price,
+                    imageURL: updatedItem.imageURL
+                }
+            };
+            const result = await tShirtDB.updateOne(filter, updateDoc, options);
+            res.send(result)
+            //console.log(result);
 
-
+        })
 
     } finally {
         //await client.close();
@@ -62,7 +78,7 @@ async function run() {
 }
 run().catch(console.dir);
 
-// CLIENT ORDER 
+// CLIENT ORDER API
 
 async function clientOrder() {
     try {
@@ -74,7 +90,7 @@ async function clientOrder() {
             const frontEndOrder = req.body;
             const result = await orderDB.insertOne(frontEndOrder);
             res.send(result);
-            console.log(result);
+            //console.log(result);
 
         });
         // All order Api
